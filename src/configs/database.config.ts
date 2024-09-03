@@ -26,6 +26,9 @@ export const getConfigPostgres = async (
     username: config.user,
     password: config.password,
     database: config.database,
+    ssl: {
+      rejectUnauthorized: true,
+    },
     entities: [User, Client], // Укажите сущности
     synchronize: configService.get<boolean>('DATABASE_SYNC'), // Включить синхронизацию схемы
   };

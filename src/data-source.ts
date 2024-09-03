@@ -20,6 +20,9 @@ export const AppDataSource = new DataSource({
   username: config.user,
   password: config.password,
   database: config.database,
+  ssl: {
+    rejectUnauthorized: true,
+  },
   entities: [User, Client], // Укажите сущности
   migrations: ['src/migrations/*.ts'],
   synchronize: Boolean(process.env.DATABASE_SYNC), // Убедитесь, что synchronize выключен в продакшене
