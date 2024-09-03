@@ -1,16 +1,20 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { parse } from 'pg-connection-string';
+import * as dotenv from 'dotenv';
 
-import { User } from 'src/users/users.entity';
+import { Client } from '../clients/clients.entity';
+import { User } from '../users/users.entity';
+
+dotenv.config();
 
 // Получите строку подключения из переменной окружения
-const connectionString = process.env.DATABASE_URL;
+const connectionString = process.env.DATABASE_URL || '';
 
 // Парсите строку подключения
 const config = parse(connectionString);
 
-console.log(config);
+console.log('config', config);
 
 export const getConfigPostgres = async (
   configService: ConfigService,
@@ -22,7 +26,7 @@ export const getConfigPostgres = async (
     username: config.user,
     password: config.password,
     database: config.database,
-    entities: [User], // Укажите сущности
+    entities: [User, Client], // Укажите сущности
     synchronize: configService.get<boolean>('DATABASE_SYNC'), // Включить синхронизацию схемы
   };
 };
