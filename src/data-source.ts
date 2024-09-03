@@ -21,7 +21,7 @@ export const AppDataSource = new DataSource({
   password: config.password,
   database: config.database,
   ssl: {
-    rejectUnauthorized: true,
+    rejectUnauthorized: Boolean(process.env.SSL_REJECT_UNAUTHORIZED) || true,
   },
   entities: [User, Client], // Укажите сущности
   migrations: ['src/migrations/*.ts'],

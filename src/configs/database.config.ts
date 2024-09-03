@@ -27,7 +27,7 @@ export const getConfigPostgres = async (
     password: config.password,
     database: config.database,
     ssl: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: Boolean(process.env.SSL_REJECT_UNAUTHORIZED) || true,
     },
     entities: [User, Client], // Укажите сущности
     synchronize: configService.get<boolean>('DATABASE_SYNC'), // Включить синхронизацию схемы
