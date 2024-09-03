@@ -14,8 +14,6 @@ const connectionString = process.env.DATABASE_URL || '';
 // Парсите строку подключения
 const config = parse(connectionString);
 
-console.log('config', config);
-
 export const getConfigPostgres = async (
   configService: ConfigService,
 ): Promise<TypeOrmModuleOptions> => {
@@ -27,7 +25,7 @@ export const getConfigPostgres = async (
     password: config.password,
     database: config.database,
     ssl: {
-      rejectUnauthorized: Boolean(process.env.SSL_REJECT_UNAUTHORIZED) || true,
+      rejectUnauthorized: JSON.parse(process.env.SSL_REJECT_UNAUTHORIZED),
     },
     entities: [User, Client], // Укажите сущности
     synchronize: configService.get<boolean>('DATABASE_SYNC'), // Включить синхронизацию схемы
