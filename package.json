@@ -31,6 +31,7 @@
     "@nestjs/platform-express": "^10.4.1",
     "@nestjs/typeorm": "^10.0.2",
     "basic-auth": "^2.0.1",
+    "crypto": "^1.0.1",
     "pg": "^8.12.0",
     "pg-connection-string": "^2.6.4",
     "reflect-metadata": "^0.2.0",
@@ -77,5 +78,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": "18.19.0"
   }
 }

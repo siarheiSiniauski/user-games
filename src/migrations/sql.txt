@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE clients (
+CREATE TABLE "clients" (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email VARCHAR UNIQUE,
   token VARCHAR,
@@ -9,12 +9,11 @@ CREATE TABLE clients (
   blocked BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  username VARCHAR UNIQUE,
-  password VARCHAR,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP
+CREATE TABLE "users" (
+    "id" UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "name" VARCHAR NOT NULL,
+    "telegramId" INTEGER NOT NULL,
+    "avatar" VARCHAR DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS clients;

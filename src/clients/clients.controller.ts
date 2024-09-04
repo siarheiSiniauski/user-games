@@ -8,9 +8,10 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { AdminAuthGuard } from 'src/guards/admin-auth.guard';
+import { AdminAuthGuard } from '../guards/admin-auth.guard';
 import { ClientService } from './clients.service';
 import { Client } from './clients.entity';
+import { randomBytes } from 'crypto';
 
 @UseGuards(AdminAuthGuard)
 @Controller('clients')
@@ -19,10 +20,10 @@ export class ClientController {
 
   // Создание нового клиента
   @Post()
-  async create(
-    @Body() createClientDto: { email: string; token: string },
-  ): Promise<Client> {
-    return this.clientService.create(createClientDto);
+  async create(@Body() { email }: { email: string }): Promise<Client> {
+    const token = randomBytes(32).toString('hex').slice(0, 32);
+
+    return this.clientService.create({ email, token });
   }
 
   // Получение всех клиентов

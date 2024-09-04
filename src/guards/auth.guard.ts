@@ -21,6 +21,10 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = request.headers['x-battle-room'] as string; // Замените на ваш заголовок
 
+    if (!token) {
+      throw new ForbiddenException('Access denied: Invalid token');
+    }
+
     // Найти клиента с таким токеном
     const client = await this.clientRepository.findOne({ where: { token } });
 
@@ -31,9 +35,7 @@ export class AuthGuard implements CanActivate {
         throw new ForbiddenException('Access denied: Client is blocked');
       }
     } else {
-      throw new ForbiddenException(
-        'Access denied: Invalid x-battle-room token',
-      );
+      throw new ForbiddenException('Access denied: Invalid token');
     }
   }
 }

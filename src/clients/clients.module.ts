@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Client } from './clients.entity';
 import { ClientService } from './clients.service';
 import { ClientController } from './clients.controller';
+import { AdminAuthGuard } from 'src/guards/admin-auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Client])],
-  providers: [ClientService],
+  providers: [ClientService, AdminAuthGuard, AuthGuard],
   controllers: [ClientController],
-  exports: [ClientService, TypeOrmModule.forFeature([Client])], // Экспортируем сервис и репозиторий
+  exports: [ClientService, TypeOrmModule], // Экспортируем сервис и репозиторий
 })
-export class ClientsModule {}
+export class ClientModule {}
