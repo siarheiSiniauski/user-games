@@ -24,7 +24,7 @@ export class UserService {
     let user = await this.userRepository.findOneBy({ telegramId });
 
     // Генерация JWT токена
-    const payload = { telegramId: user.telegramId, sub: user.id };
+    const payload = { telegramId: user.telegramId };
     const token = this.jwtService.sign(payload);
 
     // Если пользователь не найден, создаем нового
@@ -42,8 +42,6 @@ export class UserService {
     // Сохранение токена в базу данных
     user.token = token;
     user = await this.userRepository.save(user);
-
-    console.log('findOrCreateUser', user);
 
     return user;
   }
