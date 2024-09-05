@@ -23,21 +23,21 @@ export class UserService {
     // Попытка найти пользователя по telegramId
     let user = await this.userRepository.findOneBy({ telegramId });
 
-    // Генерация JWT токена
-    const payload = { telegramId: user.telegramId };
-    const token = this.jwtService.sign(payload);
-
     // Если пользователь не найден, создаем нового
     if (!user) {
       const candidate = {
         name: `User-` + telegramId,
         telegramId: +telegramId,
         avatar: null,
-        token,
+        token: null,
       };
       user = this.userRepository.create(candidate);
       user = await this.userRepository.save(user);
     }
+
+    // Генерация JWT токена
+    const payload = { telegramId: user.telegramId };
+    const token = this.jwtService.sign(payload);
 
     // Сохранение токена в базу данных
     user.token = token;
