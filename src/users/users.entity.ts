@@ -13,4 +13,7 @@ export class User {
 
   @Column({ default: null })
   avatar: string;
+
+  @Column({ default: null })
+  token: string;
 }

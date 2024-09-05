@@ -12,6 +12,6 @@ async function bootstrap() {
   // Включение CORS с глобальными настройками
   app.enableCors(getConfigCors());
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 5002);
 }
 bootstrap();

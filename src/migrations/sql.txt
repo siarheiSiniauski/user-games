@@ -16,6 +16,9 @@ CREATE TABLE "users" (
     "avatar" VARCHAR DEFAULT NULL
 );
 
+ALTER TABLE "user" ADD "token" character varying
+
 DROP TABLE IF EXISTS clients;
 DROP TABLE IF EXISTS users;
+ALTER TABLE "users" DROP COLUMN "token"
 

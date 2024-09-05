@@ -11,6 +11,8 @@ import { UserService } from './users/users.service';
 import { ClientModule } from './clients/clients.module';
 import { ClientController } from './clients/clients.controller';
 import { ClientService } from './clients/clients.service';
+import { JwtModule } from '@nestjs/jwt';
+import { getJwtConfig } from './configs/jwt.config';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { ClientService } from './clients/clients.service';
       inject: [ConfigService],
       useFactory: getConfigPostgres,
     }),
+    JwtModule.register(getJwtConfig()),
     UserModule,
     ClientModule,
   ],
