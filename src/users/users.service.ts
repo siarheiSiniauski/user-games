@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,8 @@ export class UserService {
     private readonly userRepository: Repository<User>,
 
     private readonly jwtService: JwtService,
+
+    private readonly cloudinaryService: CloudinaryService, // Внедрение CloudinaryService
   ) {}
 
   // Метод для получения всех пользователей
@@ -44,5 +47,46 @@ export class UserService {
     user = await this.userRepository.save(user);
 
     return user;
+  }
+
+  // Метод для обновления пользователя по telegramId
+  async updateUser(
+    telegramId: number,
+    updateData: Partial<User>,
+  ): Promise<User | null> {
+    // Попытка найти пользователя по telegramId
+    const user = await this.userRepository.findOneBy({ telegramId });
+
+    if (!user) {
+      // Если пользователь не найден, возвращаем null
+      return null;
+    }
+
+    // Обновляем поля пользователя
+    this.userRepository.merge(user, updateData);
+
+    // Сохраняем изменения в базе данных
+    return this.userRepository.save(user);
+  }
+
+  // Метод для обновления аватара пользователя
+  async updateAvatar(
+    telegramId: number,
+    file: Express.Multer.File,
+  ): Promise<User | null> {
+    try {
+      // Загрузка изображения в Cloudinary
+      const uploadResult = await this.cloudinaryService.uploadImage(file);
+
+      // Получаем URL изображения из результата загрузки
+      const imageUrl = uploadResult.secure_url;
+
+      // Обновляем пользователя с новым URL изображения
+      return this.updateUser(telegramId, { avatar: imageUrl });
+    } catch (error) {
+      // Обработка ошибок
+      console.error('Error uploading image:', error);
+      throw new Error('Failed to upload image');
+    }
   }
 }

@@ -13,6 +13,7 @@ import { ClientController } from './clients/clients.controller';
 import { ClientService } from './clients/clients.service';
 import { JwtModule } from '@nestjs/jwt';
 import { getJwtConfig } from './configs/jwt.config';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { getJwtConfig } from './configs/jwt.config';
     JwtModule.register(getJwtConfig()),
     UserModule,
     ClientModule,
+    CloudinaryModule,
   ],
   controllers: [ClientController, UserController],
   providers: [ClientService, UserService],
