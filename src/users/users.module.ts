@@ -6,7 +6,7 @@ import { User } from './users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientModule } from 'src/clients/clients.module';
 import { JwtService } from '@nestjs/jwt';
-import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), ClientModule, CloudinaryModule],

@@ -4,16 +4,13 @@ import {
   UploadedFile,
   UseInterceptors,
   Param,
-  UseGuards,
   Headers,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from './cloudinary.service';
-import { AuthGuard } from 'src/guards/auth.guard';
 
-@UseGuards(AuthGuard)
 @Controller('upload')
-export class UploadController {
+export class CloudinaryController {
   constructor(private readonly cloudinaryService: CloudinaryService) {}
 
   @Post(':folder')

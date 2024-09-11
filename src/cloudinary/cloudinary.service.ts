@@ -1,17 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { v2 as cloudinary, UploadApiOptions, UploadApiResponse } from 'cloudinary';
+import {
+  v2 as cloudinary,
+  UploadApiOptions,
+  UploadApiResponse,
+} from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import * as multer from 'multer';
-import { parse } from 'parse-cloudinary-url';
 import jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+import { parseCloudinaryUrl } from 'src/utils/parseCloudinaryUrl';
+
+dotenv.config();
 
 @Injectable()
 export class CloudinaryService {
-  private readonly JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+  private readonly JWT_SECRET = process.env.JWT_SECRET;
 
   constructor() {
     // Разбор URL и настройка Cloudinary
     const cloudinaryUrl = process.env.CLOUDINARY_URL;
+
     if (cloudinaryUrl) {
       const { cloudName, apiKey, apiSecret } =
         this.getCloudinaryCredentials(cloudinaryUrl);
@@ -27,7 +35,7 @@ export class CloudinaryService {
 
   // Метод для получения Cloudinary учетных данных из URL
   private getCloudinaryCredentials(url: string) {
-    const { cloudName, apiKey, apiSecret } = parse(url);
+    const { cloudName, apiKey, apiSecret } = parseCloudinaryUrl(url);
     if (cloudName && apiKey && apiSecret) {
       return { cloudName, apiKey, apiSecret };
     } else {
