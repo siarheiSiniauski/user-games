@@ -75,16 +75,12 @@ export class UserService {
     file: Express.Multer.File,
   ): Promise<User | null> {
     try {
-      // Загрузка изображения в Cloudinary
       const uploadResult = await this.cloudinaryService.uploadImage(file);
 
-      // Получаем URL изображения из результата загрузки
-      const imageUrl = uploadResult.secure_url;
+      const imageUrl = uploadResult.secure_url; // secure_url доступно после приведения типа
 
-      // Обновляем пользователя с новым URL изображения
       return this.updateUser(telegramId, { avatar: imageUrl });
     } catch (error) {
-      // Обработка ошибок
       console.error('Error uploading image:', error);
       throw new Error('Failed to upload image');
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { v2 as cloudinary, UploadApiOptions } from 'cloudinary';
+import { v2 as cloudinary, UploadApiOptions, UploadApiResponse } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import * as multer from 'multer';
 import { parse } from 'parse-cloudinary-url';
@@ -51,12 +51,15 @@ export class CloudinaryService {
   }
 
   // Метод для загрузки изображения напрямую через Cloudinary API
-  async uploadImage(file: Express.Multer.File, options?: UploadApiOptions) {
+  async uploadImage(
+    file: Express.Multer.File,
+    options?: UploadApiOptions,
+  ): Promise<UploadApiResponse> {
     return new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream(options, (error, result) => {
           if (error) return reject(error);
-          resolve(result);
+          resolve(result as UploadApiResponse); // Явное приведение типа
         })
         .end(file.buffer);
     });
