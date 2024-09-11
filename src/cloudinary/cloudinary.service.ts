@@ -61,13 +61,34 @@ export class CloudinaryService {
   // Метод для загрузки изображения напрямую через Cloudinary API
   async uploadImage(
     file: Express.Multer.File,
+    folder?: string,
+    width?: number,
+    height?: number,
+    crop: 'fill' | 'fit' | 'limit' | 'pad' | 'scale' | 'thumbnail' = 'fit',
+    publicId?: string, // Имя файла
     options?: UploadApiOptions,
   ): Promise<UploadApiResponse> {
+    if (!file || !file.buffer) {
+      throw new Error('No file or file buffer provided');
+    }
+
+    // Опции загрузки изображения
+    const uploadOptions: UploadApiOptions = {
+      ...options,
+      folder, // Указываем папку
+      public_id: publicId, // Указываем имя файла
+      transformation: {
+        width,
+        height,
+        crop,
+      },
+    };
+
     return new Promise((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream(options, (error, result) => {
+        .upload_stream(uploadOptions, (error, result) => {
           if (error) return reject(error);
-          resolve(result as UploadApiResponse); // Явное приведение типа
+          resolve(result as UploadApiResponse);
         })
         .end(file.buffer);
     });

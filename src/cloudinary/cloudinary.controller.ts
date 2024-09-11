@@ -29,6 +29,6 @@ export class CloudinaryController {
     }
 
     // Загружаем файл в Cloudinary с указанием папки
-    return this.cloudinaryService.uploadImage(file, { folder });
+    return this.cloudinaryService.uploadImage(file, folder);
   }
 }

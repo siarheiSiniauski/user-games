@@ -14,7 +14,7 @@ export const parseCloudinaryUrl = (url: string): ParseResult => {
   }
 
   // Удаление схемы 'cloudinary://'
-  const urlWithoutScheme = url.slice(11);
+  const urlWithoutScheme = url.slice(13);
 
   // Разделение строки на части
   const [credentials, cloudName] = urlWithoutScheme.split('@');

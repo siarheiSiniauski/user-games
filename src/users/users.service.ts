@@ -69,17 +69,28 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  // Метод для обновления аватара пользователя
-  async updateAvatar(
-    telegramId: number,
-    file: Express.Multer.File,
-  ): Promise<User | null> {
+  async updateAvatar(telegramId: number, file: Express.Multer.File) {
     try {
-      const uploadResult = await this.cloudinaryService.uploadImage(file);
+      if (!file) {
+        throw new Error('No file provided');
+      }
 
-      const imageUrl = uploadResult.secure_url; // secure_url доступно после приведения типа
+      const user = await this.findOrCreateUser(telegramId);
 
-      return this.updateUser(telegramId, { avatar: imageUrl });
+      const result = await this.cloudinaryService.uploadImage(
+        file,
+        'avatars',
+        120,
+        120,
+        undefined,
+        `avatar-${new Date().getTime()}`,
+      );
+
+      // Обновите информацию о пользователе с URL изображения
+      user.avatar = result.secure_url; // Обновляем URL аватара
+      await this.userRepository.save(user);
+
+      return user;
     } catch (error) {
       console.error('Error uploading image:', error);
       throw new Error('Failed to upload image');
